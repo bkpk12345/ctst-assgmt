@@ -2,6 +2,24 @@
 
 A blog post and todo list backend apis enabled with RBAC
 
+## Things taken care during assignment
+
+## in terms of security
+
+1.  strong password policy
+2.  RBAC/ ACL to prevent users from accessing other's contant with self creds
+3.  jwt tokens to maintain the code users session
+4.  encrypted passwords so others can not see/guess the pasword from the the encrypted string
+5.  No password(even encrypted string) is being passed in the API response since anyone can compare password from pre existed dictionary.
+6.  Proper user data validation while signinig user in to the system.
+7.  non sensitive data is being added in the jwt payload, since anyone can decode the token and can easily see the jwt payload by decoding it.
+
+## in terms of perfromance
+
+1. Added curser based pagination instead of basic skip/limit approach. Curser based approach is much more efficient than basic skip/limit pagination.
+2. users can not manipulate the page limit in any pagination.
+3. Api rate Limit so user can not do many requests at once which may reduce performance
+
 ## Installation
 
 Install Assignment packages with npm
@@ -203,20 +221,3 @@ x-access-token -  {jwt token}
 ```http
   GET /users/{userId}/posts/{postId}/comments/{commentId}
 ```
-
-## Things taken care during assignment
-
-## in terms of security
-
-1.  strong password policy
-2.  RBAC/ ACL to prevent users from accessing other's contant with self creds
-3.  jwt tokens to maintain the code users session
-4.  encrypted passwords so others can not see/guess the pasword from the the encrypted string
-5.  No password(even encrypted string) is being passed in the API response since anyone can compare password from pre existed dictionary.
-6.  Proper user data validation while signinig user in to the system.
-7.  non sensitive data is being added in the jwt payload, since anyone can decode the token and can easily see the jwt payload by decoding it.
-
-## in terms of perfromance
-
-1. Added curser based pagination instead of basic skip/limit approach. Curser based approach is much more efficient than basic skip/limit pagination.
-2. users can not manipulate the page limit in any pagination.
