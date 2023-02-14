@@ -5,7 +5,7 @@ const todoSchema = new Schema(
   {
     title: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
-    user: { type: ObjectId, ref: "User", required: true, index: true },
+    author: { type: ObjectId, ref: "User", required: true, index: true },
     completed: { type: Boolean, default: false },
   },
   { timestamps: true }

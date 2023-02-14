@@ -1,50 +1,42 @@
-require("dotenv").config();
-const express = require("express");
-const app = express();
-const helmet = require("helmet");
-const cors = require("cors");
-const { apiLimiter, authTokenCheck, rbacAclCheck, checkError } = require("./middlewares");
+const http = require("http");
+const app = require("./app");
 
-// Helmet
-app.use(helmet());
+const port = process.env.PORT || 3001;
 
-//CORS
-app.use(cors());
+app.set("port", port);
 
-const apiRoutes = express.Router();
+const server = http.createServer(app);
 
-const Boom = require("@hapi/boom");
-const connection = require("./config/connection");
-connection();
+//listen on port
+server.listen(port);
 
-// ROUTES
-const authRoutes = require("./routes/auth.routes");
-const userRoutes = require("./routes/users.routes");
+//on err
 
-// api limit
-apiRoutes.use(apiLimiter);
+server.on("error", (error) => {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
 
-apiRoutes.use("/auth", authRoutes);
+  const bind = typeof port === "string" ? `Pipe ${port}` : `Port ${port}`;
 
-//Auth token verification
-apiRoutes.use(authTokenCheck);
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case "EACCES":
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+});
 
-//ACL check
-apiRoutes.use(rbacAclCheck);
-
-//BODY-PARSER
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-apiRoutes.use("/users", userRoutes);
-
-app.use("/api", apiRoutes);
-
-// Error Handler
-app.use(checkError);
-
-const port = process.env.PORT ?? 8001;
-
-let server = app.listen(port, () => {
-  console.log("server listening to port:", port);
+//on listening
+server.on("listening", () => {
+  const addr = server.address();
+  const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
+  console.info(`Listening on ${bind}`);
 });

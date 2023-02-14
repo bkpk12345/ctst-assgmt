@@ -1,32 +1,34 @@
+// /routes/users.routes.js
+
 const express = require("express");
-const router = express.Router();
 
 const userCtrl = require("../controllers/users.controllers");
-const todoCtrl = require("../controllers/todos.controllers");
 const postCtrl = require("../controllers/posts.controllers");
+const todoCtrl = require("../controllers/todos.controllers");
 const commentCtrl = require("../controllers/comments.controllers");
+const makeExpressCallback = require("./expressCallback");
+const router = express.Router();
 
-router.get("/", userCtrl.getUsers);
-router.get("/:userId", userCtrl.getAUser);
+router.route("/").get(makeExpressCallback(userCtrl.getAllUsers));
+router.route("/:userId").get(makeExpressCallback(userCtrl.getAUser));
 
-// TODO
+// POSTS ROUTES
+router.route("/:userId/posts").post(makeExpressCallback(postCtrl.createPosts));
+router.route("/:userId/posts").get(makeExpressCallback(postCtrl.getAllPosts));
+router.route("/:userId/posts/:postId").get(makeExpressCallback(postCtrl.getAPost));
+router.route("/:userId/posts/:postId").patch(makeExpressCallback(postCtrl.updatePosts));
+router.route("/:userId/posts/:postId").delete(makeExpressCallback(postCtrl.deletePosts));
 
-router.post("/:userId/todo", todoCtrl.createTodos);
-router.get("/:userId/todo/:todoId", todoCtrl.getATodo);
-router.get("/:userId/todo", todoCtrl.getAllTodo);
-router.patch("/:userId/todo/:todoId", todoCtrl.updateATodo);
-router.delete("/:userId/todo/:todoId", todoCtrl.deleteATodo);
+// TODO ROUTES
+router.route("/:userId/todos").post(makeExpressCallback(todoCtrl.createTodos));
+router.route("/:userId/todos").get(makeExpressCallback(todoCtrl.getAllTodos));
+router.route("/:userId/todos/:todoId").get(makeExpressCallback(todoCtrl.getATodo));
+router.route("/:userId/todos/:todoId").patch(makeExpressCallback(todoCtrl.updateTodos));
+router.route("/:userId/todos/:todoId").delete(makeExpressCallback(todoCtrl.deleteTodos));
 
-//POSTS ROUTES
-router.post("/:userId/posts", postCtrl.createAPost);
-router.get("/:userId/posts/:postId", postCtrl.getAPost);
-router.get("/:userId/posts", postCtrl.getAllPosts);
-router.patch("/:userId/posts/:postId", postCtrl.updateAPost);
-router.delete("/:userId/posts/:postId", postCtrl.deleteAPost);
-
-//COMMENTS ROUTES
-router.post("/:userId/posts/:postId/comments", commentCtrl.createAComment);
-router.get("/:userId/posts/:postId/comments", commentCtrl.getAllComments);
-router.get("/:userId/posts/:postId/comments/:commentId", commentCtrl.getAComment);
+// COMMENTS ROUTES
+router.route("/:userId/posts/:postId/comments").post(makeExpressCallback(commentCtrl.createAComment));
+router.route("/:userId/posts/:postId/comments").get(makeExpressCallback(commentCtrl.getAllComment));
+router.route("/:userId/posts/:postId/comments/:commentId").get(makeExpressCallback(commentCtrl.getAComment));
 
 module.exports = router;

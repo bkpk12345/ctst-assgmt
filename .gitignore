@@ -1,6 +1,9 @@
-node_modules/
+node_modules
+dist/
 demo.*
-*http
-*get
-*env
+txt*
+.env*
 coverage
+http
+get
+env

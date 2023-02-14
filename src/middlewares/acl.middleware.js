@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-const config = require("../config/index");
 const Boom = require("@hapi/boom");
 const { isDef, errBuilder, alterResource } = require("../helpers/index");
 const { RBAC_POLICIES } = require("../helpers/constants");

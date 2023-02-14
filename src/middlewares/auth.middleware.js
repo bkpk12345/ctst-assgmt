@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/index");
+const config = require("../config");
 const Boom = require("@hapi/boom");
 const { isDef, errBuilder } = require("../helpers/index");
 
@@ -33,6 +33,7 @@ const authTokenCheck = async (req, res, next) => {
       return next(resp);
     }
   } else {
+    console.log("hereeeeee");
     const resp = errBuilder(Boom.unauthorized("Please provide the access token"));
     return next(resp);
   }
